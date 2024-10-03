@@ -1,16 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <time.h>
 
 void setup(int grid[70][70]);
 void print(int grid[70][70]);
+void nextGeneration(int grid[70][70]);
 
 int main(void)
 {
+    srand(time(NULL));
     int grid[70][70];
     setup(grid);
     print(grid);
+    
+    while (1)
+    {
+        char* command = malloc(sizeof(char)*5);
+        scanf("%s", command);
+        if (strcmp(command, "exit") == 0)
+        {
+            break;
+        }
+        else if (strcmp(command, "next") == 0)
+        {
+            nextGeneration(grid);
+            printf("\033[H\033[J");  // ANSI escape code to clear the console
+            print(grid);
+        }
+        free(command);
+    }
 }
 
 void setup(int grid[70][70])
@@ -66,9 +85,16 @@ void nextGeneration(int grid[70][70])
                     tempGrid[i][j] = 0;
                 }
             }
-            else if (numOfNeighbors == 3)
+            else if (grid[i][j] == 0)
             {
-                tempGrid[i][j] = 1;
+                if (numOfNeighbors == 3)
+                {
+                    tempGrid[i][j] = 1;
+                }
+                else
+                {
+                    tempGrid[i][j] = 0;
+                }
             }
             
         }
